@@ -1,25 +1,24 @@
 name: Auto Format Dart Code
 
+# Changed to workflow_call so it can be used as a nested/reusable workflow
 on:
-  workflow_call: 
+  workflow_call:
 
 jobs:
   format:
     runs-on: ubuntu-latest
     
-    # Required permissions to allow GitHub Actions to write commits back to the repo
     permissions: 
       contents: write
 
     steps:
-      # 1. Check out the repository code
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           # Use github.ref to ensure it grabs the exact commit that triggered the push
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.ref }}
 
-      # 2. Using setup-flutter here since it includes the Dart SDK naturally for Flutter projects
+      # Using setup-flutter here since it includes the Dart SDK naturally for Flutter projects
       - name: Setup Flutter SDK
         uses: flutter-actions/setup-flutter@v4
         with:
@@ -29,15 +28,15 @@ jobs:
       - name: Run Dart Formatter
         run: dart format .
 
-      # 3. Automatically commit and push changes back if any formatting fixes occurred
       - name: Commit and Push Changes
+        id: auto-commit
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "style: automated dart format fixes"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
 
-      # 4. If changes were pushed, cancel this current workflow run because 
+      # If changes were pushed, cancel this current workflow run because 
       # the new commit will automatically kick off a fresh, clean workflow execution.
       - name: Cancel current run if files were formatted
         if: steps:auto-commit.outputs.changes_detected == 'true'
@@ -45,4 +44,3 @@ jobs:
         with:
           script: |
             core.setFailed('Stopping current run: Unformatted files detected. A new workflow run has been triggered for the auto-formatted commit.');
-  
