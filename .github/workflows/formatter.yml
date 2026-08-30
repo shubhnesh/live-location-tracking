@@ -1,0 +1,39 @@
+name: Auto Format Dart Code
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    
+    # Required permissions to allow GitHub Actions to write commits back to the repo
+    permissions: 
+      contents: write
+
+    steps:
+      # 1. Check out the repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Crucial for pull_request events so it checks out the actual PR branch, not a detached HEAD
+          ref: ${{ github.head_ref }}
+
+      # 2. Set up the Dart SDK environment
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+
+      # 3. Format the code in-place (This overwrites files with proper formatting)
+      - name: Run Dart Formatter
+        run: dart format .
+
+      # 4. Automatically commit and push changes back if any formatting fixes occurred
+      - name: Commit and Push Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "style: automated dart format fixes"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+  
