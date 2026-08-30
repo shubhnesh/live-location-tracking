@@ -49,9 +49,8 @@ class FloatingActionButtons extends StatelessWidget {
           elevation: 4,
           onPressed: onVisibilityPressed,
           mini: true,
-          tooltip: isPickupsVisible
-              ? 'Hide Route Summary'
-              : 'Show Route Summary',
+          tooltip:
+              isPickupsVisible ? 'Hide Route Summary' : 'Show Route Summary',
           child: Icon(
             isPickupsVisible ? Icons.visibility : Icons.visibility_off,
             size: 20,

@@ -304,9 +304,7 @@ class _RiderMapScreenState extends State<RiderMapScreen>
 
       print('Requesting route from OSRM: $url');
 
-      final response = await http
-          .get(url)
-          .timeout(
+      final response = await http.get(url).timeout(
             const Duration(seconds: 15),
             onTimeout: () => throw TimeoutException('OSRM connection timeout'),
           );
@@ -569,34 +567,34 @@ class _RiderMapScreenState extends State<RiderMapScreen>
 
     _positionStreamSubscription =
         Geolocator.getPositionStream(locationSettings: locationSettings).listen(
-          (Position position) {
-            final newLocation = LatLng(position.latitude, position.longitude);
+      (Position position) {
+        final newLocation = LatLng(position.latitude, position.longitude);
 
-            // Update state with new location and heading
-            setState(() {
-              currentLocation = newLocation;
+        // Update state with new location and heading
+        setState(() {
+          currentLocation = newLocation;
 
-              // Update heading if available
-              if (position.heading != null) {
-                _currentHeading = position.heading;
-              }
-            });
+          // Update heading if available
+          if (position.heading != null) {
+            _currentHeading = position.heading;
+          }
+        });
 
-            // Center map on current location during navigation
-            if (_inAppNavigationActive && _isFollowingUser) {
-              mapController.move(newLocation, mapController.camera.zoom);
-            }
+        // Center map on current location during navigation
+        if (_inAppNavigationActive && _isFollowingUser) {
+          mapController.move(newLocation, mapController.camera.zoom);
+        }
 
-            // Update distances to destinations
-            _updateDistancesToDestinations(newLocation);
+        // Update distances to destinations
+        _updateDistancesToDestinations(newLocation);
 
-            // Update direct route if we have a destination selected
-            if (_selectedDestination != null && currentLocation != null) {
-              // Don't need to call setState here as the async method will do it
-              _calculateDirectRoute(currentLocation!, _selectedDestination!);
-            }
-          },
-        );
+        // Update direct route if we have a destination selected
+        if (_selectedDestination != null && currentLocation != null) {
+          // Don't need to call setState here as the async method will do it
+          _calculateDirectRoute(currentLocation!, _selectedDestination!);
+        }
+      },
+    );
 
     _isTracking = true;
   }
@@ -957,9 +955,8 @@ class _RiderMapScreenState extends State<RiderMapScreen>
             HapticFeedback.selectionClick();
           }
         },
-        onVisibilityPressed: _inAppNavigationActive
-            ? null
-            : _togglePickupsVisibility,
+        onVisibilityPressed:
+            _inAppNavigationActive ? null : _togglePickupsVisibility,
         onCompassPressed: _resetMapOrientation,
       ),
       bottomNavigationBar: BottomNavBar(
@@ -985,8 +982,7 @@ class _RiderMapScreenState extends State<RiderMapScreen>
       destination = warehouseLocation;
     }
 
-    double distance =
-        Geolocator.distanceBetween(
+    double distance = Geolocator.distanceBetween(
           currentLocation!.latitude,
           currentLocation!.longitude,
           destination.latitude,
@@ -1008,9 +1004,8 @@ class _RiderMapScreenState extends State<RiderMapScreen>
       });
 
       // Focus map on selected location
-      final targetLocation = index < pickups.length
-          ? pickups[index].location
-          : warehouseLocation;
+      final targetLocation =
+          index < pickups.length ? pickups[index].location : warehouseLocation;
 
       // Calculate direct route between rider and selected location
       _calculateDirectRoute(currentLocation!, targetLocation);
@@ -1098,21 +1093,21 @@ class _RiderMapScreenState extends State<RiderMapScreen>
     _positionStreamSubscription =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position position) {
-              final newLocation = LatLng(position.latitude, position.longitude);
+      final newLocation = LatLng(position.latitude, position.longitude);
 
-              // Update current location
-              setState(() {
-                currentLocation = newLocation;
-              });
+      // Update current location
+      setState(() {
+        currentLocation = newLocation;
+      });
 
-              // Update distances
-              _updateDistancesToDestinations(newLocation);
+      // Update distances
+      _updateDistancesToDestinations(newLocation);
 
-              // Center map on current location if following
-              if (_isFollowingUser) {
-                mapController.move(newLocation, mapController.camera.zoom);
-              }
-            });
+      // Center map on current location if following
+      if (_isFollowingUser) {
+        mapController.move(newLocation, mapController.camera.zoom);
+      }
+    });
   }
 
   // Stop tracking position
@@ -1147,8 +1142,7 @@ class _RiderMapScreenState extends State<RiderMapScreen>
     for (int i = 0; i < pickups.length; i++) {
       // Actual distance to next pickup
       final destination = pickups[i].location;
-      final distance =
-          Geolocator.distanceBetween(
+      final distance = Geolocator.distanceBetween(
             currentPos.latitude,
             currentPos.longitude,
             destination.latitude,
@@ -1164,8 +1158,7 @@ class _RiderMapScreenState extends State<RiderMapScreen>
     }
 
     // Add warehouse
-    final warehouseDistance =
-        Geolocator.distanceBetween(
+    final warehouseDistance = Geolocator.distanceBetween(
           currentPos.latitude,
           currentPos.longitude,
           warehouseLocation.latitude,
@@ -1184,8 +1177,7 @@ class _RiderMapScreenState extends State<RiderMapScreen>
       for (int i = _activePickupIndex; i < pickups.length - 1; i++) {
         final from = pickups[i].location;
         final to = pickups[i + 1].location;
-        final segmentDistance =
-            Geolocator.distanceBetween(
+        final segmentDistance = Geolocator.distanceBetween(
               from.latitude,
               from.longitude,
               to.latitude,
@@ -1198,8 +1190,7 @@ class _RiderMapScreenState extends State<RiderMapScreen>
       // Add last segment to warehouse
       if (pickups.isNotEmpty) {
         final lastPickup = pickups.last.location;
-        final lastSegment =
-            Geolocator.distanceBetween(
+        final lastSegment = Geolocator.distanceBetween(
               lastPickup.latitude,
               lastPickup.longitude,
               warehouseLocation.latitude,

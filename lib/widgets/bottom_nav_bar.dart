@@ -51,9 +51,8 @@ class BottomNavBar extends StatelessWidget {
           style: const TextStyle(fontSize: 16),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: isNavigationActive
-              ? Colors.red
-              : const Color(0xFF1A73E8),
+          backgroundColor:
+              isNavigationActive ? Colors.red : const Color(0xFF1A73E8),
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

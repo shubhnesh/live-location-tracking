@@ -176,7 +176,8 @@ class _MapContentState extends State<MapContent> {
             ),
             children: [
               TileLayer(
-                urlTemplate: 'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=aYsQM4HbMnbMyYhvub76',
+                urlTemplate:
+                    'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=aYsQM4HbMnbMyYhvub76',
                 additionalOptions: const {'key': 'aYsQM4HbMnbMyYhvub76'},
                 subdomains: const ['a', 'b', 'c'],
                 userAgentPackageName: 'com.example.rider_map_view',
@@ -193,7 +194,8 @@ class _MapContentState extends State<MapContent> {
               ),
               MarkerLayer(
                 markers: _buildMarkers(),
-                rotate: widget.isNavigationActive, // Only rotate markers in navigation mode
+                rotate: widget
+                    .isNavigationActive, // Only rotate markers in navigation mode
                 alignment: Alignment.center,
               ),
             ],
@@ -519,8 +521,8 @@ class _MapContentState extends State<MapContent> {
   String calculateEstimatedTime() {
     // Simplified method - ideally this would come from parent
     double totalDistance = calculateTotalDistance();
-    int minutes = (totalDistance / 30 * 60)
-        .round(); // Assuming 30km/h avg speed
+    int minutes =
+        (totalDistance / 30 * 60).round(); // Assuming 30km/h avg speed
 
     if (minutes >= 60) {
       int hours = minutes ~/ 60;
@@ -561,8 +563,7 @@ class _MapContentState extends State<MapContent> {
     double dLat = _toRadians(lat2 - lat1);
     double dLon = _toRadians(lon2 - lon1);
 
-    double a =
-        sin(dLat / 2) * sin(dLat / 2) +
+    double a = sin(dLat / 2) * sin(dLat / 2) +
         cos(_toRadians(lat1)) *
             cos(_toRadians(lat2)) *
             sin(dLon / 2) *
