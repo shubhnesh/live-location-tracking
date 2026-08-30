@@ -6,6 +6,11 @@ on:
       - main
 
 jobs:
+
+  # Formatter Github action for auto Dart formatting
+  formatter: 
+    uses: ./.github/workflows/formatter.yml
+    
   build:
 
     runs-on: ubuntu-latest
