@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+
 import '../models/pickup_location.dart';
 import '../widgets/map_content.dart';
 import '../widgets/floating_action_buttons.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/route_summary_card.dart';
 import '../widgets/pickup_list_overlay.dart';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+
 import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:async';
+
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 
@@ -174,10 +178,9 @@ class _RiderMapScreenState extends State<RiderMapScreen>
 
       // If we have a current location and selected a pickup, calculate direct route
       if (currentLocation != null && _activePickupIndex >= 0) {
-        final targetLocation =
-            _activePickupIndex < pickups.length
-                ? pickups[_activePickupIndex].location
-                : warehouseLocation;
+        final targetLocation = _activePickupIndex < pickups.length
+            ? pickups[_activePickupIndex].location
+            : warehouseLocation;
         _calculateDirectRoute(currentLocation!, targetLocation);
       }
     } catch (e) {
@@ -564,35 +567,36 @@ class _RiderMapScreenState extends State<RiderMapScreen>
       distanceFilter: 5, // Update more frequently (every 5 meters)
     );
 
-    _positionStreamSubscription = Geolocator.getPositionStream(
-      locationSettings: locationSettings,
-    ).listen((Position position) {
-      final newLocation = LatLng(position.latitude, position.longitude);
+    _positionStreamSubscription =
+        Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+          (Position position) {
+            final newLocation = LatLng(position.latitude, position.longitude);
 
-      // Update state with new location and heading
-      setState(() {
-        currentLocation = newLocation;
+            // Update state with new location and heading
+            setState(() {
+              currentLocation = newLocation;
 
-        // Update heading if available
-        if (position.heading != null) {
-          _currentHeading = position.heading;
-        }
-      });
+              // Update heading if available
+              if (position.heading != null) {
+                _currentHeading = position.heading;
+              }
+            });
 
-      // Center map on current location during navigation
-      if (_inAppNavigationActive && _isFollowingUser) {
-        mapController.move(newLocation, mapController.camera.zoom);
-      }
+            // Center map on current location during navigation
+            if (_inAppNavigationActive && _isFollowingUser) {
+              mapController.move(newLocation, mapController.camera.zoom);
+            }
 
-      // Update distances to destinations
-      _updateDistancesToDestinations(newLocation);
+            // Update distances to destinations
+            _updateDistancesToDestinations(newLocation);
 
-      // Update direct route if we have a destination selected
-      if (_selectedDestination != null && currentLocation != null) {
-        // Don't need to call setState here as the async method will do it
-        _calculateDirectRoute(currentLocation!, _selectedDestination!);
-      }
-    });
+            // Update direct route if we have a destination selected
+            if (_selectedDestination != null && currentLocation != null) {
+              // Don't need to call setState here as the async method will do it
+              _calculateDirectRoute(currentLocation!, _selectedDestination!);
+            }
+          },
+        );
 
     _isTracking = true;
   }
@@ -693,10 +697,9 @@ class _RiderMapScreenState extends State<RiderMapScreen>
       context: context,
       builder: (BuildContext context) {
         int nextIndex = _activePickupIndex + 1;
-        String nextDestination =
-            nextIndex < pickups.length
-                ? "Pickup ${pickups[nextIndex].id}"
-                : "Warehouse";
+        String nextDestination = nextIndex < pickups.length
+            ? "Pickup ${pickups[nextIndex].id}"
+            : "Warehouse";
 
         return AlertDialog(
           title: const Text('Continue to next destination?'),
@@ -868,27 +871,25 @@ class _RiderMapScreenState extends State<RiderMapScreen>
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color:
-                              _activePickupIndex < pickups.length
-                                  ? Colors.red
-                                  : Colors.green,
+                          color: _activePickupIndex < pickups.length
+                              ? Colors.red
+                              : Colors.green,
                           shape: BoxShape.circle,
                         ),
                         child: Center(
-                          child:
-                              _activePickupIndex < pickups.length
-                                  ? Text(
-                                    '${pickups[_activePickupIndex].id}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                  : const Icon(
-                                    Icons.warehouse,
+                          child: _activePickupIndex < pickups.length
+                              ? Text(
+                                  '${pickups[_activePickupIndex].id}',
+                                  style: const TextStyle(
                                     color: Colors.white,
-                                    size: 20,
+                                    fontWeight: FontWeight.bold,
                                   ),
+                                )
+                              : const Icon(
+                                  Icons.warehouse,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -907,10 +908,9 @@ class _RiderMapScreenState extends State<RiderMapScreen>
                                 ? 'You have arrived!'
                                 : '${_getDistanceToActiveDestination().toStringAsFixed(1)} km remaining',
                             style: TextStyle(
-                              color:
-                                  _destinationReached
-                                      ? Colors.green
-                                      : Colors.grey.shade700,
+                              color: _destinationReached
+                                  ? Colors.green
+                                  : Colors.grey.shade700,
                             ),
                           ),
                         ],
@@ -923,10 +923,9 @@ class _RiderMapScreenState extends State<RiderMapScreen>
                               : Icons.location_disabled,
                         ),
                         onPressed: _toggleFollowMode,
-                        color:
-                            _isFollowingUser
-                                ? const Color(0xFF1A73E8)
-                                : Colors.grey,
+                        color: _isFollowingUser
+                            ? const Color(0xFF1A73E8)
+                            : Colors.grey,
                       ),
                     ],
                   ),
@@ -958,7 +957,9 @@ class _RiderMapScreenState extends State<RiderMapScreen>
             HapticFeedback.selectionClick();
           }
         },
-        onVisibilityPressed: _inAppNavigationActive ? null : _togglePickupsVisibility,
+        onVisibilityPressed: _inAppNavigationActive
+            ? null
+            : _togglePickupsVisibility,
         onCompassPressed: _resetMapOrientation,
       ),
       bottomNavigationBar: BottomNavBar(
@@ -1007,8 +1008,9 @@ class _RiderMapScreenState extends State<RiderMapScreen>
       });
 
       // Focus map on selected location
-      final targetLocation =
-          index < pickups.length ? pickups[index].location : warehouseLocation;
+      final targetLocation = index < pickups.length
+          ? pickups[index].location
+          : warehouseLocation;
 
       // Calculate direct route between rider and selected location
       _calculateDirectRoute(currentLocation!, targetLocation);
@@ -1093,24 +1095,24 @@ class _RiderMapScreenState extends State<RiderMapScreen>
       distanceFilter: 10, // Update every 10 meters
     );
 
-    _positionStreamSubscription = Geolocator.getPositionStream(
-      locationSettings: locationSettings,
-    ).listen((Position position) {
-      final newLocation = LatLng(position.latitude, position.longitude);
+    _positionStreamSubscription =
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position position) {
+              final newLocation = LatLng(position.latitude, position.longitude);
 
-      // Update current location
-      setState(() {
-        currentLocation = newLocation;
-      });
+              // Update current location
+              setState(() {
+                currentLocation = newLocation;
+              });
 
-      // Update distances
-      _updateDistancesToDestinations(newLocation);
+              // Update distances
+              _updateDistancesToDestinations(newLocation);
 
-      // Center map on current location if following
-      if (_isFollowingUser) {
-        mapController.move(newLocation, mapController.camera.zoom);
-      }
-    });
+              // Center map on current location if following
+              if (_isFollowingUser) {
+                mapController.move(newLocation, mapController.camera.zoom);
+              }
+            });
   }
 
   // Stop tracking position
@@ -1238,13 +1240,13 @@ class _RiderMapScreenState extends State<RiderMapScreen>
   void _togglePickupsVisibility() {
     setState(() {
       _isPickupsVisible = !_isPickupsVisible;
-      
+
       // Close the pickup list if we're hiding everything
       if (!_isPickupsVisible) {
         _isPickupsListVisible = false;
       }
     });
-    
+
     // Provide haptic feedback for the toggle
     HapticFeedback.selectionClick();
   }
@@ -1265,7 +1267,7 @@ class _RiderMapScreenState extends State<RiderMapScreen>
   void _resetMapOrientation() {
     // Set the map's rotation to 0 (north at top)
     mapController.rotate(0);
-    
+
     // Provide haptic feedback to indicate orientation reset
     HapticFeedback.lightImpact();
   }

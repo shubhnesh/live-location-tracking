@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../models/pickup_location.dart';
 
 class RouteSummaryCard extends StatelessWidget {
@@ -76,8 +77,8 @@ class RouteSummaryCard extends StatelessWidget {
               // Get the distance for this pickup
               final distance =
                   segmentDistances.isNotEmpty && index < segmentDistances.length
-                      ? segmentDistances[index]
-                      : 0.0;
+                  ? segmentDistances[index]
+                  : 0.0;
 
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -228,8 +229,8 @@ class RouteSummaryCard extends StatelessWidget {
     final pickup = pickups[activePickupIndex];
     final distance =
         segmentDistances.isEmpty || activePickupIndex >= segmentDistances.length
-            ? 0.0
-            : segmentDistances[activePickupIndex];
+        ? 0.0
+        : segmentDistances[activePickupIndex];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,

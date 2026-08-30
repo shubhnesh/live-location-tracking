@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:rider_map_view/models/pickup_location.dart';
 import 'package:rider_map_view/widgets/route_summary_card.dart';
+
 import 'dart:math';
 
 class MapContent extends StatefulWidget {
@@ -62,9 +63,7 @@ class _MapContentState extends State<MapContent> {
       return const Center(child: Text('No location data available'));
     }
 
-    return RepaintBoundary(
-      child: _buildMapContent(),
-    );
+    return RepaintBoundary(child: _buildMapContent());
   }
 
   Widget _buildLoadingState() {
@@ -168,7 +167,8 @@ class _MapContentState extends State<MapContent> {
                 // This could be replaced with a callback to parent if needed
               },
               interactionOptions: const InteractionOptions(
-                flags: InteractiveFlag.all, // Allow all interactions including rotation
+                flags: InteractiveFlag
+                    .all, // Allow all interactions including rotation
                 enableMultiFingerGestureRace: true,
               ),
               // Set default rotation to 0 (north up)
@@ -176,8 +176,7 @@ class _MapContentState extends State<MapContent> {
             ),
             children: [
               TileLayer(
-                urlTemplate:
-                    'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=aYsQM4HbMnbMyYhvub76',
+                urlTemplate: 'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=aYsQM4HbMnbMyYhvub76',
                 additionalOptions: const {'key': 'aYsQM4HbMnbMyYhvub76'},
                 subdomains: const ['a', 'b', 'c'],
                 userAgentPackageName: 'com.example.rider_map_view',
@@ -237,23 +236,23 @@ class _MapContentState extends State<MapContent> {
           isDotted: false,
         ),
       );
-      
+
       // If not in navigation mode, also show all route segments in gray
       if (!widget.isNavigationActive) {
         _addRegularRoutePolylines(polylines);
       }
-      
+
       return polylines;
     }
 
     // Otherwise, fall back to the old behavior
     if (widget.routePoints.isEmpty) return polylines;
-    
+
     _addRegularRoutePolylines(polylines);
 
     return polylines;
   }
-  
+
   // Helper to add the regular route polylines (segmented routes)
   void _addRegularRoutePolylines(List<Polyline> polylines) {
     // Simplify routes for better performance when there are many points
@@ -279,11 +278,12 @@ class _MapContentState extends State<MapContent> {
     // Add each segment with a different color
     for (int i = 0; i < optimizedRoutes.length; i++) {
       final segment = optimizedRoutes[i];
-      
+
       // If we're showing direct route, all regular routes are gray
-      final bool isActiveSegment = widget.directRoutePoints.isEmpty && i == widget.activePickupIndex;
-      final Color color = isActiveSegment 
-          ? const Color(0xFF1A73E8)  // Blue for active
+      final bool isActiveSegment =
+          widget.directRoutePoints.isEmpty && i == widget.activePickupIndex;
+      final Color color = isActiveSegment
+          ? const Color(0xFF1A73E8) // Blue for active
           : Colors.grey;
       final double opacity = isActiveSegment ? 1.0 : 0.6;
       final double width = isActiveSegment ? 6.0 : 3.5;
@@ -320,7 +320,9 @@ class _MapContentState extends State<MapContent> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Transform.rotate(
-                angle: widget.heading != null ? (widget.heading! * (3.14159265359 / 180)) : 0,
+                angle: widget.heading != null
+                    ? (widget.heading! * (3.14159265359 / 180))
+                    : 0,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -344,8 +346,10 @@ class _MapContentState extends State<MapContent> {
                         boxShadow: [
                           BoxShadow(
                             color: const Color(0xFF1A73E8).withOpacity(0.4),
-                            blurRadius: 4, // Reduced blur for better performance
-                            spreadRadius: 1, // Reduced spread for better performance
+                            blurRadius:
+                                4, // Reduced blur for better performance
+                            spreadRadius:
+                                1, // Reduced spread for better performance
                           ),
                         ],
                       ),
@@ -381,9 +385,11 @@ class _MapContentState extends State<MapContent> {
     final activePickups = widget.pickups.length > markerLimit
         ? [
             ...widget.pickups.sublist(
-                0, min(widget.activePickupIndex + 3, widget.pickups.length)),
+              0,
+              min(widget.activePickupIndex + 3, widget.pickups.length),
+            ),
             if (widget.activePickupIndex + 3 < widget.pickups.length)
-              widget.pickups.last
+              widget.pickups.last,
           ]
         : widget.pickups;
 
@@ -414,9 +420,7 @@ class _MapContentState extends State<MapContent> {
                       vertical: 2,
                     ),
                     margin: const EdgeInsets.only(bottom: 0),
-                    constraints: const BoxConstraints(
-                      maxWidth: 60,
-                    ),
+                    constraints: const BoxConstraints(maxWidth: 60),
                     decoration: BoxDecoration(
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(10),
@@ -463,12 +467,12 @@ class _MapContentState extends State<MapContent> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  margin: const EdgeInsets.only(bottom: 0),
-                  constraints: const BoxConstraints(
-                    maxWidth: 80,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
                   ),
+                  margin: const EdgeInsets.only(bottom: 0),
+                  constraints: const BoxConstraints(maxWidth: 80),
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(10),
@@ -515,8 +519,8 @@ class _MapContentState extends State<MapContent> {
   String calculateEstimatedTime() {
     // Simplified method - ideally this would come from parent
     double totalDistance = calculateTotalDistance();
-    int minutes =
-        (totalDistance / 30 * 60).round(); // Assuming 30km/h avg speed
+    int minutes = (totalDistance / 30 * 60)
+        .round(); // Assuming 30km/h avg speed
 
     if (minutes >= 60) {
       int hours = minutes ~/ 60;
@@ -557,7 +561,8 @@ class _MapContentState extends State<MapContent> {
     double dLat = _toRadians(lat2 - lat1);
     double dLon = _toRadians(lon2 - lon1);
 
-    double a = sin(dLat / 2) * sin(dLat / 2) +
+    double a =
+        sin(dLat / 2) * sin(dLat / 2) +
         cos(_toRadians(lat1)) *
             cos(_toRadians(lat2)) *
             sin(dLon / 2) *

@@ -35,35 +35,33 @@ class FloatingActionButtons extends StatelessWidget {
           onPressed: onLocationPressed,
           mini: true,
           tooltip: 'My Location',
-          child: const 
-            Icon(
-              Icons.my_location,
-            ),
+          child: const Icon(Icons.my_location),
         ),
         const SizedBox(height: 12),
-        
+
         // Eye button for toggling Route Summary Card visibility
         FloatingActionButton(
           heroTag: 'visibility',
           backgroundColor: Colors.white,
-          foregroundColor: 
-            onVisibilityPressed == null 
-            ? Colors.grey.shade400
-            : const Color(0xFF1A73E8),
+          foregroundColor: onVisibilityPressed == null
+              ? Colors.grey.shade400
+              : const Color(0xFF1A73E8),
           elevation: 4,
           onPressed: onVisibilityPressed,
           mini: true,
-          tooltip: isPickupsVisible ? 'Hide Route Summary' : 'Show Route Summary',
+          tooltip: isPickupsVisible
+              ? 'Hide Route Summary'
+              : 'Show Route Summary',
           child: Icon(
             isPickupsVisible ? Icons.visibility : Icons.visibility_off,
             size: 20,
-            color: onVisibilityPressed == null 
+            color: onVisibilityPressed == null
                 ? Colors.grey.shade400
                 : const Color(0xFF1A73E8),
           ),
         ),
         const SizedBox(height: 12),
-        
+
         // Compass button for map orientation
         FloatingActionButton(
           heroTag: 'compass',
@@ -73,10 +71,7 @@ class FloatingActionButtons extends StatelessWidget {
           onPressed: onCompassPressed,
           mini: true,
           tooltip: 'Reset Map Orientation',
-          child: const 
-            Icon(
-              Icons.explore,
-            ),
+          child: const Icon(Icons.explore),
         ),
       ],
     );

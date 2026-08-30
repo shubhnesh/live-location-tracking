@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../models/pickup_location.dart';
 
 class PickupListOverlay extends StatelessWidget {
@@ -19,9 +20,7 @@ class PickupListOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 8,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -33,10 +32,7 @@ class PickupListOverlay extends StatelessWidget {
               children: [
                 const Text(
                   'Select Destination',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
@@ -79,7 +75,9 @@ class PickupListOverlay extends StatelessWidget {
                       ),
                     ),
                     title: Text('Pickup ${pickup.id}'),
-                    subtitle: Text('${pickup.inventory} items • ${pickup.timeSlot}'),
+                    subtitle: Text(
+                      '${pickup.inventory} items • ${pickup.timeSlot}',
+                    ),
                     selected: isActive,
                     onTap: () {
                       onPickupSelected(index);
@@ -87,15 +85,15 @@ class PickupListOverlay extends StatelessWidget {
                     },
                   );
                 }).toList(),
-                
+
                 // Add warehouse as the last item
                 ListTile(
                   leading: Container(
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: activePickupIndex >= pickups.length 
-                          ? Colors.green 
+                      color: activePickupIndex >= pickups.length
+                          ? Colors.green
                           : Colors.grey.shade300,
                       shape: BoxShape.circle,
                     ),
@@ -103,8 +101,8 @@ class PickupListOverlay extends StatelessWidget {
                       child: Icon(
                         Icons.warehouse,
                         size: 16,
-                        color: activePickupIndex >= pickups.length 
-                            ? Colors.white 
+                        color: activePickupIndex >= pickups.length
+                            ? Colors.white
                             : Colors.black,
                       ),
                     ),
@@ -121,7 +119,10 @@ class PickupListOverlay extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
             child: Text(
               'Tap on a destination to view its route',
               style: TextStyle(
@@ -135,4 +136,4 @@ class PickupListOverlay extends StatelessWidget {
       ),
     );
   }
-} 
+}
