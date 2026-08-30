@@ -13,6 +13,8 @@ jobs:
     
   build:
 
+    needs: formatter
+
     runs-on: ubuntu-latest
 
     steps:
