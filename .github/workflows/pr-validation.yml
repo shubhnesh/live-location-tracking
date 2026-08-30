@@ -10,6 +10,8 @@ jobs:
   # Formatter Github action for auto Dart formatting
   formatter: 
     uses: ./.github/workflows/formatter.yml
+    permissions: 
+      contents: write
     
   build:
 
@@ -33,8 +35,9 @@ jobs:
           channel: stable
           version: 3.0.2
 
-      - name: Verify Code Formatting
-        run: dart format --output=none --set-exit-if-changed .
+      # Get dependencies so analysis works correctly
+      - name: Install dependencies
+        run: flutter pub get
 
       - name: Analyze
         run: flutter analyze
