@@ -39,7 +39,7 @@ jobs:
       # If changes were pushed, cancel this current workflow run because 
       # the new commit will automatically kick off a fresh, clean workflow execution.
       - name: Cancel current run if files were formatted
-        if: steps:auto-commit.outputs.changes_detected == 'true'
+        if: steps.auto-commit.outputs.changes_detected == 'true'
         uses: actions/github-script@v7
         with:
           script: |
