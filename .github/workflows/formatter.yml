@@ -2,6 +2,7 @@ name: Auto Format Dart Code
 
 on:
   push:
+    # Select branches
     branches: 
       - main
 
