@@ -6,22 +6,20 @@ on:
       - main
 
 jobs:
-
-  # Formatter Github action for auto Dart formatting
+  # 1. Trigger the auto-formatter first
   formatter: 
     uses: ./.github/workflows/formatter.yml
-    permissions: 
+    permissions:
       contents: write
-    
+
+  # 2. Run the main verification tasks
   build:
-
     needs: formatter
-
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4 # Upgraded to match common versioning
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -44,7 +42,3 @@ jobs:
 
       - name: Testing
         run: flutter test
-
-      
-
-      
